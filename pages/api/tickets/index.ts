@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectDatabase from "../../../lib/connectDatabase";
 import Ticket from "../../../model/Ticket";
-import response_message from "../../../lib/response_message";
 import { getSession } from 'next-auth/react';
 import User from "../../../model/User";
 
@@ -40,7 +39,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	const totalPages = Math.ceil(totalItems / args.per_page);
 
 	// Ensure the page number is within the valid range
-	args.page = Math.max(1, Math.min(args.page, totalPages));
+	args.page = Math.max(1, args.page);
 	if(!args.orderby){
 		args.orderby = 'updateAt';
 	}

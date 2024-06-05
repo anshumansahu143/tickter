@@ -15,10 +15,11 @@ export default function Ticket(props:any) {
     oldClass  = 'border-l-4 border-green-500';
   }
 
-  console.log(ticket);
 
   return (
-      <div className={`${oldClass} flex flex-wrap items-center gap-4 border-b border-b-slate-200 p-4 cursor-pointer hover:bg-slate-100 transition-all`}>
+      <div className={`${oldClass} flex flex-wrap items-center gap-4 border-b border-b-slate-200 p-4 cursor-pointer hover:bg-slate-100 transition-all`} onClick={()=>{
+        
+      }}>
           {
             ticket?.author?.image?.length?
             <img className="w-12 h-12 border rounded-[50%]" src={ticket?.author?.image}/>

@@ -19,6 +19,9 @@ input {
 .btn {
   @apply bg-blue-500 text-white  py-2 px-4 rounded;
 }
+.btn.active {
+  @apply bg-teal-500 text-white  py-2 px-4 rounded;
+}
 
 .btn-primary {
   @apply bg-blue-700 hover:bg-blue-800;
