@@ -37,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
   };
 
   return (
-    <div className="pagination my-4 flex items-center gap-2">
+    <div className="pagination my-4 flex items-center gap-2 w-full flex justify-center flex-wrap text-xs">
       {renderPageNumbers()}
     </div>
   );

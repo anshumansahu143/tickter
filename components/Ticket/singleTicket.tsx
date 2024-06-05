@@ -1,26 +1,17 @@
-import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toFriendlyTime } from "../Common/friendlyTime";
+import useTicket from "../../utils/use-ticket";
 
-export default function Ticket(props:any) {
+  
+const SingleTicket: React.FC<any> = ({ id }) => {
   const { data: session } = useSession<any>();
-  let ticket = props.ticket;
-  let ticketTime = props.ticket.updatedAt;
-  let ms = (new Date().getTime()-new Date(ticketTime).getTime())/1000;
-  let oldClass = '';
-  if(ms>24*60*60){
-    oldClass = 'border-l-4 border-red-500';
-  }else{
-    oldClass  = 'border-l-4 border-green-500';
-  }
 
-
+ const {data:ticket} = useTicket(parseInt(id));
+    console.log(ticket);
   return (
-    <Link
-      href={'/ticket/'+ticket.ticketId} replace
-    >
-      <div className={`${oldClass} flex flex-wrap items-center gap-4 border-b border-b-slate-200 p-4 cursor-pointer hover:bg-slate-100 transition-all`} onClick={()=>{
+    ticket?.ticketId?
+      <div className={`flex flex-wrap items-center gap-4 border-b border-b-slate-200 p-4 cursor-pointer hover:bg-slate-100 transition-all`} onClick={()=>{
         
       }}>
           {
@@ -40,6 +31,8 @@ export default function Ticket(props:any) {
               </div>
           </div>
       </div>
-      </Link>
+      :<></>
   );
 }
+
+export default SingleTicket;
