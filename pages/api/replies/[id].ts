@@ -1,0 +1,38 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import connectDatabase from "../../../lib/connectDatabase";
+import Reply from "../../../model/Reply";
+import response_message from "../../../lib/response_message";
+import { getSession } from 'next-auth/react';
+import User from "../../../model/User";
+
+export default async function (req: NextApiRequest, res: NextApiResponse) {
+  try {
+    // connect database
+    await connectDatabase();
+    // check request method POST or not
+    if (req.method === "POST")
+      throw Error("HTTP method not valid POST not Accepted!");
+
+    // check req body empty
+    const { id } = req.query;
+    console.log('id',id);
+    const ticketId = Array.isArray(id) ? id[0] : id;
+    if(!id){
+      throw Error("invalid id");
+    }
+    const session = await getSession({ req });
+   
+    if(!session?.user?.email){
+        throw Error("Sorry you cannot fetch any tickets!");
+    }
+  
+    const { _doc: user } = await User.findOne({ email:session?.user?.email });
+    if(!user){
+        throw Error("Sorry you cannot fetch any tickets!");
+    }
+    const items = await Reply.find({ticketId:id}).sort({'createdAt':-1}).populate('author')
+    res.status(200).json({  replies:items });
+  } catch (error: any) {
+    res.status(500).json({ error: error });
+  }
+}

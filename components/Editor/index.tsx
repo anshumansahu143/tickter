@@ -202,7 +202,7 @@ const Editor: React.FC<any> = (props) => {
 
   const content = props?.content
   return (
-    <div className='my-4 flex flex-col  p-2'>
+    <div className='my-4 flex flex-col p-2 border rounded-sm bg-white'>
       <EditorProvider slotBefore={<MenuBar />} extensions={extensions} content={content} onUpdate= {({ editor }) => {setEditorHTML(editor?.getHTML());}} >
 
       </EditorProvider>

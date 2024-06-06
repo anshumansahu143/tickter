@@ -6,7 +6,7 @@ const replySchema = new mongoose.Schema(
     replyTicketId: { type: mongoose.Schema.ObjectId, ref: 'Ticket'},
     content: String,
     status:String,
-    privacy:String,
+    private:Number,
     attachments:[{id:String,url:String,name:String}]
   },
   { timestamps: true }

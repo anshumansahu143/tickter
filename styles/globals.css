@@ -61,14 +61,17 @@ ol{
     }
   }
 }
-.tiptap.ProseMirror:focus-visible{
-  border:none !important;
+.tiptap.ProseMirror:focus,.tiptap.ProseMirror:focus-visible{
+  outline:none;
 }
 .tiptap.ProseMirror{
   border:1px solid rgba(0,0,0,0.1);
   padding:1rem ;
   margin:1rem 0;
-  border-radius:1rem;
+  border-radius:3px;
+  outline:none ;
+  border:none;
+  border-top:1px solid rgba(0,0,0,0.1)
 }
 .tiptapmenu button{
   font-size:0.8rem;

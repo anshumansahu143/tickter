@@ -41,7 +41,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	// Ensure the page number is within the valid range
 	args.page = Math.max(1, args.page);
 	if(!args.orderby){
-		args.orderby = 'updateAt';
+		args.orderby = 'updatedAt';
 	}
 	if(!args.order){
 		args.order = 'desc';

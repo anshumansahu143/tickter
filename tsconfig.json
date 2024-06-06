@@ -28,6 +28,6 @@
     "pages/index.jsx",
     "lib/connectDatabase.ts",
     "pages/_app.js"
-  ],
+, "model/Ticket.js"  ],
   "exclude": ["node_modules"]
 }

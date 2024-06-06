@@ -15,7 +15,6 @@ const  Tickets: React.FC<any> = (props) =>{
     setArgs({...args,...props.args});
   },[props.args]);
 
-  console.log('props',props.args.page,args);
   const { data: ticketsData ,isLoading,isError} = useTicketsList(args);
 
   function signOutHandle() {

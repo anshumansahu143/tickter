@@ -1,20 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import connectDatabase from "../../../../lib/connectDatabase";
-import Ticket from "../../../../model/Ticket";
-import response_message from "../../../../lib/response_message";
+import connectDatabase from "../../../lib/connectDatabase";
+import Reply from "../../../model/Reply";
+import Ticket from "../../../model/Ticket";
+import response_message from "../../../lib/response_message";
 import { getSession } from 'next-auth/react';
-import User from "../../../../model/User";
-import Counter from "../../../../model/Counter";
+import User from "../../../model/User";
+import mongoose from "mongoose";
 
-async function getNextSequence(collectionName:any) {
-  const ret = await Counter.findOneAndUpdate(
-    { _id: collectionName },
-    { $inc: { seq: 1 } },
-    { new: true, upsert: true }
-  );
-  console.log(ret.seq,ret);
-  return ret.seq;
-}
+
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   try {
     // connect database
@@ -26,7 +19,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
     // check req body empty
     if (!req.body) return response_message(res, 404, "Don't have form data!");
-    const { title, description } = JSON.parse(req.body);
+    const { privacy, description,ticketId } = JSON.parse(req.body);
 
     const session = await getSession({ req });
    
@@ -38,16 +31,20 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     if(!user){
         throw Error("Sorry you cannot create any tickets!");
     }
-    let newID = await getNextSequence("Ticket");
-    Ticket.create(
-      { title, description,  privacy: 'public',status: 'open',replyCount:0,author:user._id,lastReply:null,ticketId:newID },
-      (error: any, doc: any) => {
+    Reply.create(
+      { content:description, private: 0,status: 'open',author:user._id,tickedId:ticketId},
+      async(error: any, doc: any) => {
         if (error) {
           res.status(200).json({ error: error });
         };
-        res.status(200).json({ ticket: doc });
+        const result = await Ticket.updateOne({_id:new mongoose.Types.ObjectId(ticketId)},{lastReply:doc._id}, {
+            upsert: false,
+            runValidators: true,
+        });
+        res.status(200).json({ reply: doc });
       }
     );
+    
   } catch (error: any) {
     res.status(500).json({ error: error });
   }
