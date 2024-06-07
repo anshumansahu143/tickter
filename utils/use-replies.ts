@@ -1,9 +1,9 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 
-export default function useReplies(id: number) {
+export default function useReplies(id: string) {
   return useQuery(
-    ["replies", id],
+    ["replies",id],
     async () => {
         if(!id)return {replies:[]};
         let data:any = {};
@@ -17,7 +17,7 @@ export default function useReplies(id: number) {
     },
     {
       enabled: !!id,
-      staleTime: -1,
+      staleTime: 3600,
     },
   );
 }

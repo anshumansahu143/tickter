@@ -6,16 +6,17 @@ import useReplies from "../../utils/use-replies";
 import Button from "../Common/Button";
 import PostReply from "./postReply";
 import Reply from "./Reply";
+import { useQueryClient } from "@tanstack/react-query";
 
   
 const SingleTicket: React.FC<any> = ({ id }) => {
   const { data: session } = useSession<any>();
+  const queryClient = useQueryClient();
 
   const {data:ticket} = useTicket(parseInt(id));
-  const {data:replies} = useReplies(parseInt(id));
+  const {data:replies} = useReplies(ticket?._id);
   const [showReplyBox,setShowReplyBox] = useState(false);
 
-    console.log(replies);
   return (
     ticket?.ticketId?
     <div className="container flex flex-wrap gap-4 my-8">
@@ -31,7 +32,11 @@ const SingleTicket: React.FC<any> = ({ id }) => {
           </div>
           {
             showReplyBox?
-            <PostReply id={ticket._id} close={()=>setShowReplyBox(false)}></PostReply>
+            <PostReply id={ticket._id} close={()=>setShowReplyBox(false)} replyAdded={async(updatedData:any)=>{
+              console.log(updatedData);
+              let response = await queryClient.refetchQueries({queryKey:["replies",ticket._id],stale: true});
+              console.log(response);
+            }}></PostReply>
             :''
           }
           <div className="flex flex-col">

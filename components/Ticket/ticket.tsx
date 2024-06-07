@@ -18,7 +18,7 @@ export default function Ticket(props:any) {
 
   return (
     <Link
-      href={'/ticket/'+ticket.ticketId} replace
+      href={'/ticket/'+ticket.ticketId} 
     >
       <div className={`${oldClass} flex flex-wrap items-center gap-4 border-b border-b-slate-200 p-4 cursor-pointer hover:bg-slate-100 transition-all`} onClick={()=>{
         

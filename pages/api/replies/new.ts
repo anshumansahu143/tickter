@@ -28,11 +28,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     }
   
     const { _doc: user } = await User.findOne({ email:session?.user?.email });
+    delete user.password;
     if(!user){
         throw Error("Sorry you cannot create any tickets!");
     }
     Reply.create(
-      { content:description, private: 0,status: 'open',author:user._id,tickedId:ticketId},
+      { content:description, private: (privacy?1:0),status: 'open',author:user._id,replyTicketId:ticketId},
       async(error: any, doc: any) => {
         if (error) {
           res.status(200).json({ error: error });
@@ -41,7 +42,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
             upsert: false,
             runValidators: true,
         });
-        res.status(200).json({ reply: doc });
+        
+        let newReply = {...doc._doc};
+        newReply.author = user;
+        console.log(newReply);
+        res.status(200).json({ reply: newReply });
       }
     );
     

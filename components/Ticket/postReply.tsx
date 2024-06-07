@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
-import { useAuthContext, useAuthContextType } from "../../context/AuthContext";
-import {  useEffect, useState } from "react";
-import Tiptap from "../Editor";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useAuthContext, useAuthContextType } from "../../context/AuthContext";
+import Tiptap from "../Editor";
 import InputErrorMessage from "../Utils/InputErrorMessage";
 import TostMessage from "../Utils/TostMessage";
 
@@ -25,17 +25,18 @@ function ticket_validation(values: values_type) {
 interface PostReplyProps{
     id:string;
     close:any;
+    replyAdded:any;
 }
 
 
-const PostReply: React.FC<any> = ({id,close})=> {
+const PostReply: React.FC<any> = ({id,close,replyAdded})=> {
   const { data: session } = useSession<any>();
   const { state, dispatch }: useAuthContextType = useAuthContext();
   const [content,setContent] = useState('');
   const [loading,setLoading] = useState(false);
-  function signOutHandle() {
-    signOut();
-  }
+
+  
+
   const addReply = (values:any)=>{
 
     setLoading(true);
@@ -51,8 +52,9 @@ const PostReply: React.FC<any> = ({id,close})=> {
 
         //clear react query cache
         //close this popup
-        
+        replyAdded(data.reply);
         TostMessage("Successfully created", "success");
+        close();
       }else{
         TostMessage("Some error orrcured", "error");
       }

@@ -9,14 +9,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   try {
     // connect database
     await connectDatabase();
-    console.log('############');
     // check request method POST or not
     if (req.method === "POST")
       throw Error("HTTP method not valid POST not Accepted!");
 
     // check req body empty
     const { id } = req.query;
-    console.log('id',id);
     const ticketId = Array.isArray(id) ? id[0] : id;
     if(!id){
       throw Error("invalid id");
