@@ -17,9 +17,7 @@ const  Tickets: React.FC<any> = (props) =>{
 
   const { data: ticketsData ,isLoading,isError} = useTicketsList(args);
 
-  function signOutHandle() {
-    signOut();
-  }
+  
   if(isLoading){
     return <></>;
   }

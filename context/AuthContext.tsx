@@ -50,12 +50,12 @@ const AuthProvider = ({ children }: any) => {
         })
 
         .then((res) => {
-          const { _id, balance, email, image, name }: any = res.data?.user;
+          const { _id, role, email, image, name }: any = res.data?.user;
           dispatch({
             type: "set_user",
             payload: {
               _id,
-              balance,
+              role,
               email,
               image:
                 image ||

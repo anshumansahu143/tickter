@@ -7,7 +7,7 @@ export default interface authStateType {
 
 export type userType = {
   _id?: string;
-  balance?: number;
+  role?: number;
   email?: string;
   image?: string;
   name?: string;

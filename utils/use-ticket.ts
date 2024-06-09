@@ -1,11 +1,10 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 
-export default function useTicketsList(id: number) {
+export default function useTicket(id: number) {
   return useQuery(
     ["ticket", id],
     async () => {
-        if(!id)return {ticket:{}};
         let data:any = {};
         let response:any = await fetch(`/api/ticket/${id}`);
         

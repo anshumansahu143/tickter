@@ -17,7 +17,7 @@ export default function useReplies(id: string) {
     },
     {
       enabled: !!id,
-      staleTime: 3600,
+      staleTime: -1,
     },
   );
 }
