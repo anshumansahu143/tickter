@@ -15,26 +15,26 @@ import { SessionProvider } from "next-auth/react";
 import "nprogress/nprogress.css";
 
 
-// React Context API
-import { AppProps } from 'next/app';
 import { ReactQueryClientProvider } from "../components/ReactQueryClientProvider";
 import ContextProvider from "../context";
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }:any) {
 
   
-
+  console.log(pageProps?.session);
   return (
     <>
     <SessionProvider session={pageProps?.session}>
-      <ReactQueryClientProvider>
+      
         <ContextProvider>
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-          <ToastContainer />
+          <ReactQueryClientProvider>
+            <Header />
+            <Component {...pageProps} />
+            <Footer />
+            <ToastContainer />
+          </ReactQueryClientProvider>
         </ContextProvider>
-      </ReactQueryClientProvider>
+      
       
     </SessionProvider>
     

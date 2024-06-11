@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toFriendlyTime } from "../Common/friendlyTime";
 import useTicket from "../../utils/use-ticket";
 import useReplies from "../../utils/use-replies";
@@ -7,7 +7,18 @@ import PostReply from "./postReply";
 import Reply from "./Reply";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuthContext, useAuthContextType } from "../../context/AuthContext";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog"
+import TostMessage from "../Utils/TostMessage";
   
 const SingleTicket: React.FC<any> = ({ id }) => {
   const { state, dispatch }: useAuthContextType = useAuthContext();
@@ -18,16 +29,56 @@ const SingleTicket: React.FC<any> = ({ id }) => {
   const [showReplyBox,setShowReplyBox] = useState(false);
 
   const updateTicket = (field:string,value:string)=>{
+    let updateArgs:any = {};
+    updateArgs[field] = value; 
+    fetch( `/api/tickets/${ticket?._id}`, {
+        method: 'POST',
+        body: JSON.stringify(updateArgs),
+    } ) // wrapped
+    .then( res => res.json() )
+    .then( data => {
+      if(data.status){
+        queryClient.setQueryData(['ticket', ticket._id], (oldData:any) => {
+          oldData = {...oldData,...updateArgs};
+          return oldData;
+        });
 
+        TostMessage("Successfully created", "success");
+      }else{
+        TostMessage("Some error orrcured", "error");
+      }
+    })
+    .catch( err => {
+        console.log(err);
+        TostMessage("Some error orrcured", "error");
+    });
   }
-  console.log(state,ticket?.author);
+
+  const deleteTicket = ()=>{
+    fetch( `/api/tickets/${ticket?._id}`, {
+        method: 'DELETE',
+    } ) // wrapped
+    .then( res => res.json() )
+    .then( data => {
+      if(data.status){
+        TostMessage("Successfully created", "success");
+      }else{
+        TostMessage("Some error orrcured", "error");
+      }
+    })
+    .catch( err => {
+        console.log(err);
+        TostMessage("Some error orrcured", "error");
+    });
+  }
+  
   return (
     
       ticket?.ticketId?
       <div className="container flex flex-wrap  my-8">
         <div className="tix-wrap basis-9/12 shadow-lg">
             <div className="bg-white z-10">
-              <div className="bg-teal-500 p-4 text-white">
+              <div className={`${(ticket.privacy==='private'?'bg-rose-500':'bg-teal-500')} p-4 text-white`}>
                   TICKET #{ticket.ticketId}
               </div>
               <h1 className="text-2xl p-4">{ticket.title}</h1>
@@ -86,12 +137,29 @@ const SingleTicket: React.FC<any> = ({ id }) => {
                   <option value="private">Private</option>
                   <option value="public">Public</option>
                 </select>
-                <a className="text-rose-600 p-2 cursor-pointer">Delete ticket</a>
+                <AlertDialog>
+                <AlertDialogTrigger className="text-rose-600 p-2 cursor-pointer text-left">Delete ticket</AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete the ticket?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={deleteTicket}>Yes</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+                
                 </>
                 :''
               }
           </div>
         </div>
+        
       </div>
       :<></>
     

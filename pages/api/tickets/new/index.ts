@@ -29,7 +29,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     const { title, description } = JSON.parse(req.body);
 
     const session = await getSession({ req });
-   
+   console.log('session',session);
     if(!session?.user?.email){
         throw Error("Sorry you cannot create any tickets!");
     }

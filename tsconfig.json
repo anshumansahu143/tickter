@@ -16,18 +16,13 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "paths": {
-    "@/*": [
-      "../*"
-    ]
-  },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "pages/index.jsx",
     "lib/connectDatabase.ts",
-    "pages/_app.js"
-, "model/Ticket.js"  ],
+    "pages/_app.js", 
+    "model/Ticket.js"  ],
   "exclude": ["node_modules"]
 }

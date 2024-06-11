@@ -17,7 +17,7 @@ export default function TicketPage() {
   const parsedId = Array.isArray(id) ? id[0] : id;
 
   return (
-    <ReactQueryClientProvider>
+    <>
       {
         parsedId?
         <SingleTicket id={parsedId} page={1}/>
@@ -25,6 +25,6 @@ export default function TicketPage() {
       }
       
       <ReactQueryDevtools initialIsOpen={false} />
-    </ReactQueryClientProvider>
+    </>
   );
 }

@@ -36,7 +36,7 @@ export default NextAuth({
       name: "Credentials",
       async authorize(credentials, req) {
         await connectDatabase();
-
+        console.log('credentials',credentials);
         // check user existance
         const user = await User.findOne({ email: credentials?.email });
         if (!user) throw Error("Email or Password doesn't match!");
@@ -55,5 +55,5 @@ export default NextAuth({
     }),
   ],
 
-  secret: "NE6qyym4mH0hNJP7nAq+kNS6OGo0RUfXPkCWyYl46cA=",
+  secret: process.env.NEXTAUTH_SECRET,
 });
