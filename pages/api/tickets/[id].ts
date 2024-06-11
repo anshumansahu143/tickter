@@ -13,15 +13,15 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     let { id } = req.query;
     id = Array.isArray(id)?id[0]:id;
     console.log(id);
-    // check request method POST or not
-    if (req.method === "POST"){
+    // check request method PATCH or not
+    if (req.method === "PATCH"){
         // check req body empty
 
         if (!req.body) return response_message(res, 404, "Don't have form data!");
         let data = JSON.parse(req.body);
-console.log('data',data)
+
         const session = await getSession({ req });
-        console.log('session',session)
+
         if(!session?.user?.email){
             throw Error("Sorry you cannot create any tickets!");
         }
@@ -30,17 +30,19 @@ console.log('data',data)
         if(!user){
             throw Error("Sorry you cannot create any tickets!");
         }
-        const result:any = await Ticket.updateOne({_id:new mongoose.Types.ObjectId(id)},data, {
-            upsert: false,
-            runValidators: true,
-        });
-        res.status(200).json({ status: result });
-        return;
+        const { _doc: ticket } = await Ticket.findOne({ _id:new mongoose.Types.ObjectId(id) });
+        if(ticket.author.equals(user._id) || user.role==1){
+            const result:any = await Ticket.updateOne({_id:new mongoose.Types.ObjectId(id)},data, {
+                upsert: false,
+                runValidators: true,
+            });
+            res.status(200).json({ status: result });
+        }else{
+            res.status(200).json({ status: false });
+        }
     }
       
     if(req.method==='DELETE'){
-        if (!req.body) return response_message(res, 404, "Don't have form data!");
-        const { title, description } = JSON.parse(req.body);
 
         const session = await getSession({ req });
     
@@ -52,8 +54,16 @@ console.log('data',data)
         if(!user){
             throw Error("Sorry you cannot create any tickets!");
         }
-        const result:any = await Ticket.deleteOne({_id:new mongoose.Types.ObjectId(id)});
-        res.status(200).json({ status: result });
+
+        const { _doc: ticket } = await Ticket.findOne({ _id:new mongoose.Types.ObjectId(id) });
+       
+        if(ticket.author.equals(user._id) || user.role==1){
+            const result:any = await Ticket.deleteOne({_id:new mongoose.Types.ObjectId(id)});
+            res.status(200).json({ status: result });
+        }else{
+            res.status(200).json({ status: false });
+        }
+        
         return;
     }
     throw Error("HTTP method not valid only PATCH AND DELETE Accepted!");

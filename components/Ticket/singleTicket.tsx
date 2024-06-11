@@ -7,6 +7,8 @@ import PostReply from "./postReply";
 import Reply from "./Reply";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuthContext, useAuthContextType } from "../../context/AuthContext";
+import { useRouter } from "next/router";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +23,7 @@ import {
 import TostMessage from "../Utils/TostMessage";
   
 const SingleTicket: React.FC<any> = ({ id }) => {
+  const router = useRouter();
   const { state, dispatch }: useAuthContextType = useAuthContext();
   const queryClient = useQueryClient();
 
@@ -31,19 +34,17 @@ const SingleTicket: React.FC<any> = ({ id }) => {
   const updateTicket = (field:string,value:string)=>{
     let updateArgs:any = {};
     updateArgs[field] = value; 
+    ticket[field] = value;
     fetch( `/api/tickets/${ticket?._id}`, {
-        method: 'POST',
+        method: 'PATCH',
         body: JSON.stringify(updateArgs),
     } ) // wrapped
     .then( res => res.json() )
     .then( data => {
       if(data.status){
-        queryClient.setQueryData(['ticket', ticket._id], (oldData:any) => {
-          oldData = {...oldData,...updateArgs};
-          return oldData;
-        });
+        queryClient.invalidateQueries({queryKey:['ticket', parseInt(id)]});
 
-        TostMessage("Successfully created", "success");
+        TostMessage("Successfully updated", "success");
       }else{
         TostMessage("Some error orrcured", "error");
       }
@@ -61,7 +62,10 @@ const SingleTicket: React.FC<any> = ({ id }) => {
     .then( res => res.json() )
     .then( data => {
       if(data.status){
-        TostMessage("Successfully created", "success");
+        TostMessage("Successfully deleted", "success");
+        setTimeout(()=>{
+          router.push("/tickets")
+        },1500);
       }else{
         TostMessage("Some error orrcured", "error");
       }
@@ -78,7 +82,7 @@ const SingleTicket: React.FC<any> = ({ id }) => {
       <div className="container flex flex-wrap  my-8">
         <div className="tix-wrap basis-9/12 shadow-lg">
             <div className="bg-white z-10">
-              <div className={`${(ticket.privacy==='private'?'bg-rose-500':'bg-teal-500')} p-4 text-white`}>
+              <div className={`${(ticket?.privacy==='private'?'bg-rose-400':'bg-teal-500')} p-4 text-white`}>
                   TICKET #{ticket.ticketId}
               </div>
               <h1 className="text-2xl p-4">{ticket.title}</h1>
@@ -91,7 +95,6 @@ const SingleTicket: React.FC<any> = ({ id }) => {
               <PostReply id={ticket._id} close={()=>setShowReplyBox(false)} replyAdded={async(updatedData:any)=>{
                 console.log(updatedData);
                 queryClient.setQueryData(['replies', ticket._id], (oldData:any) => {
-                  console.log(oldData);
                   if (!oldData) {
                     oldData = []; // Initialize as empty array if undefined
                   }
@@ -125,14 +128,14 @@ const SingleTicket: React.FC<any> = ({ id }) => {
                 
                 <select className="border p-2" onChange={(e)=>{
                   updateTicket('status',e.target.value)
-                }}>
+                }} value={ticket?.status}>
                   <option value="">Select status</option>
                   <option value="open">Open</option>
                   <option value="closed">Closed</option>
                 </select>
                 <select className="border  p-2" onChange={(e)=>{
-                  updateTicket('status',e.target.value)
-                }}>
+                  updateTicket('privacy',e.target.value)
+                }} value={ticket?.privacy}>
                   <option value="">Select privacy</option>
                   <option value="private">Private</option>
                   <option value="public">Public</option>
