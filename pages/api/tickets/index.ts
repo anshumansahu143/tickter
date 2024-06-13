@@ -25,7 +25,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	let data:any ={};
 	let filter:any = {};
     const session = await getSession({ req });
-	console.log('session',session);
     const { _doc: user } = await User.findOne({ email:session?.user?.email });
 	if(args.scope=='mine'){
 		filter['author'] = user._id;

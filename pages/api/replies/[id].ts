@@ -32,10 +32,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     if(!user){
         throw Error("Sorry you cannot fetch any tickets!");
     }
-
-   
     const items = await Reply.find({replyTicketId:ticketId}).populate('author').sort({'createdAt':-1}).exec();
     res.status(200).json({  replies:items });
+   
+    
   } catch (error: any) {
     console.log('error',error);
     res.status(500).json({ error: error });

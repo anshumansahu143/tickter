@@ -21,14 +21,15 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog"
 import TostMessage from "../Utils/TostMessage";
-  
+import { Skeleton } from "../ui/skeleton"
+
 const SingleTicket: React.FC<any> = ({ id }) => {
   const router = useRouter();
   const { state, dispatch }: useAuthContextType = useAuthContext();
   const queryClient = useQueryClient();
 
   const {data:ticket} = useTicket(parseInt(id));
-  const {data:replies} = useReplies(ticket?._id);
+  const {data:replies,isLoading} = useReplies(ticket?._id);
   const [showReplyBox,setShowReplyBox] = useState(false);
 
   const updateTicket = (field:string,value:string)=>{
@@ -80,12 +81,14 @@ const SingleTicket: React.FC<any> = ({ id }) => {
     
       ticket?.ticketId?
       <div className="container flex flex-wrap  my-8">
+        
         <div className="tix-wrap basis-9/12 shadow-lg">
             <div className="bg-white z-10">
               <div className={`${(ticket?.privacy==='private'?'bg-rose-400':'bg-teal-500')} p-4 text-white`}>
                   TICKET #{ticket.ticketId}
               </div>
               <h1 className="text-2xl p-4">{ticket.title}</h1>
+              <div className=" p-4" dangerouslySetInnerHTML={{__html:ticket.description}}></div>
               <div className="bg-slate-100 p-4">
                   <button className="btn" onClick={()=>{setShowReplyBox(!showReplyBox)}}>Post a reply</button>
               </div>
@@ -111,7 +114,12 @@ const SingleTicket: React.FC<any> = ({ id }) => {
                 replies.map((reply:any)=>{
                   return <Reply reply={reply} key={reply._id}></Reply>
                 })
-                :''
+                :isLoading?<div className="flex flex-col gap-2 m-4">
+                <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+                <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+                <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+          
+                </div>:''
               }
               
             </div>
@@ -162,9 +170,13 @@ const SingleTicket: React.FC<any> = ({ id }) => {
               }
           </div>
         </div>
-        
       </div>
-      :<></>
+      :<div className="flex flex-col gap-2 m-4">
+      <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+      <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+      <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+
+      </div>
     
   );
 }

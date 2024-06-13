@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import useTicketsList from "../../utils/use-tickets";
 import Ticket from './ticket';
 import Pagination from "./Pagination";
+import { Skeleton } from "../ui/skeleton";
 const  Tickets: React.FC<any> = (props) =>{
   const { data: session } = useSession<any>();
   const { state, dispatch }: useAuthContextType = useAuthContext();
@@ -19,10 +20,29 @@ const  Tickets: React.FC<any> = (props) =>{
 
   
   if(isLoading){
-    return <></>;
+    return <div className="container p-6 flex flex-wrap gap-4">
+      <div className="tix-wrap basis-9/12 flex gap-4 flex-col">
+        <div className="flex w-full gap-4 m-4">
+          <Skeleton className="w-[50px] h-[50px] rounded-full"></Skeleton>
+          <div className="flex w-full flex-col gap-2 ">
+            <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+            <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+            <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+          </div>
+        </div>
+        <div className="flex w-full gap-4 m-4">
+          <Skeleton className="w-[50px] h-[50px] rounded-full"></Skeleton>
+          <div className="flex w-full flex-col gap-2 ">
+            <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+            <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+            <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
+          </div>
+        </div>
+      </div>
+    </div>;
   }
   return (
-    <div className="container p-6 flex flex-wrap gap-4">
+    <div className="container p-6 flex flex-wrap">
       <div className="tix-wrap basis-9/12">
       {
         ticketsData?.items?.length?
@@ -45,9 +65,20 @@ const  Tickets: React.FC<any> = (props) =>{
       }
       
       </div>
-      <div className="flex-1 basis-2/12">
-        bulk
-      </div>
+      <div className="basis-3/12 ">
+          
+          <div className="flex flex-col shadow-lg mx-4 p-4 gap-4 sticky top-[100px]" >
+              
+              <div className="flex flex-col gap-4">
+              <Link
+                href={'/tickets/new'} 
+               className="btn w-full text-center">Submit a Ticket</Link>
+               <Link
+                href={'/my-tickets'} 
+               className="w-full">My tickets</Link>
+              </div>
+          </div>
+        </div>
     </div>
   );
 }
