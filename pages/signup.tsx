@@ -160,9 +160,9 @@ const signup = () => {
                   />
                 </div>
 
-                <Button type="submit" loading={loading}>
+                <button type="submit" disabled={loading} className={("btn w-full"+ (loading?'opacity-50':''))}>
                   Create an account
-                </Button>
+                </button>
               </form>{" "}
               <GoogleSigninButton />
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">

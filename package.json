@@ -51,6 +51,7 @@
     "@types/node": "18.7.5",
     "@types/react": "^18.3.3",
     "autoprefixer": "^10.4.13",
+    "debounce": "^2.1.0",
     "lucide-react": "^0.379.0",
     "mongoose-sequence": "^6.0.1",
     "nprogress": "^0.2.0",

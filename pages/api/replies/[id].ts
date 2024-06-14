@@ -17,17 +17,20 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
   
     const ticketId = Array.isArray(id) ? id[0] : id;
-    console.log('ticketId---',ticketId);
     if(!ticketId){
       throw Error("invalid id");
     }
     const session = await getSession({ req });
 
-    if(!session?.user?.email){
-        throw Error("Sorry you cannot fetch any tickets!");
-    }
+   
   
-    const { _doc: user } = await User.findOne({ email:session?.user?.email });
+    let user:any = {};
+    try{
+      const { _doc } = await User.findOne({ email:session?.user?.email });
+      user = _doc;
+    }catch(error){
+
+    }
  
     if(!user){
         throw Error("Sorry you cannot fetch any tickets!");

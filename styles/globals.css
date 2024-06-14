@@ -5,6 +5,7 @@
 @tailwind utilities;
 @layer base {
   :root {
+    --bg-primary:@apply bg-teal-300;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -84,7 +85,7 @@ input {
 
 @layer components {
   .container {
-    @apply mx-auto px-3 max-w-[1240px];
+    @apply mx-auto px-3 max-w-[1240px] ;
   }
 }
 .btn {

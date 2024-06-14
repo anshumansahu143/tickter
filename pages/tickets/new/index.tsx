@@ -1,13 +1,12 @@
-import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
-import { useAuthContext, useAuthContextType } from "../../../context/AuthContext";
-import { use, useEffect, useState } from "react";
-import Tiptap from "../../../components/Editor";
 import { useFormik } from "formik";
-import axiosInstance from "../../../lib/axiosInstance";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Tiptap from "../../../components/Editor";
 import InputErrorMessage from "../../../components/Utils/InputErrorMessage";
-import Button from "../../../components/Common/Button";
 import TostMessage from "../../../components/Utils/TostMessage";
+import { useAuthContext, useAuthContextType } from "../../../context/AuthContext";
 
 type values_type = {
   title?: string;
@@ -34,10 +33,10 @@ function ticket_validation(values: values_type) {
 
 
 
-export default function Home() {
+export default function NewTicket() {
+  const router = useRouter();
   const { data: session } = useSession<any>();
-  const { state, dispatch }: useAuthContextType = useAuthContext();
-  const [content,setContent] = useState('');
+  const { state }: useAuthContextType = useAuthContext();
   const [loading,setLoading] = useState(false);
   function signOutHandle() {
     signOut();
@@ -55,6 +54,9 @@ export default function Home() {
       console.log(data);
       if(data.ticket){
         TostMessage("Successfully created", "success");
+        setTimeout(()=>{
+          router.push('/ticket/'+data?.ticket?.ticketId);
+        },1500);
       }else{
         TostMessage("Some error orrcured", "error");
       }

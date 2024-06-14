@@ -21,13 +21,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     }
     const session = await getSession({ req });
    
-    if(!session?.user?.email){
-        throw Error("Sorry you cannot fetch any tickets!");
-    }
+
   
-    const { _doc: user } = await User.findOne({ email:session?.user?.email });
-    if(!user){
-        throw Error("Sorry you cannot fetch any tickets!");
+    let user:any = {};
+    try{
+      const { _doc } = await User.findOne({ email:session?.user?.email });
+      user = _doc;
+    }catch(error){
+  
     }
     const { _doc: ticket } = await Ticket.findOne({ ticketId:ticketId }).populate('author');
     res.status(200).json({  ticket });

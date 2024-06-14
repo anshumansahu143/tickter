@@ -1,7 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useRouter } from 'next/router';
-import { ReactQueryClientProvider } from '../../../components/ReactQueryClientProvider';
 import SingleTicket from '../../../components/Ticket/singleTicket';
 
 export default function TicketPage() {
@@ -24,7 +22,6 @@ export default function TicketPage() {
         :''
       }
       
-      <ReactQueryDevtools initialIsOpen={false} />
     </>
   );
 }

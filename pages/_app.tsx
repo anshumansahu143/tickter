@@ -1,4 +1,3 @@
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import "../styles/globals.css";
 
 // React Toastify Popup
@@ -29,7 +28,7 @@ export default function App({ Component, pageProps }:any) {
         <ContextProvider>
           <ReactQueryClientProvider>
             <Header />
-            <Component {...pageProps} />
+            <Component {...pageProps} className="min-h-[100vh]" />
             <Footer />
             <ToastContainer />
           </ReactQueryClientProvider>

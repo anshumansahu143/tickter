@@ -109,9 +109,9 @@ const login = () => {
                   />
                 </div>
 
-                <Button type="submit" loading={loading}>
+                <button type="submit" disabled={loading} className={("btn w-full"+ (loading?'opacity-50':''))}>
                   Login
-                </Button>
+                </button>
               </form>
 
               <GoogleSigninButton />

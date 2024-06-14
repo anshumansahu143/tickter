@@ -8,10 +8,13 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
   const router = useRouter();
 
   const handlePageChange = (page:number) => {
-    console.log(router.pathname,page,currentPage);
-    let path=router.pathname+'/page/'+ page;
-    if(router.pathname.includes('[page]')){
-        path=router.pathname.replace('[page]',page.toString());
+    let pathname = router.pathname;
+    if(!pathname.includes('tickets')){
+      pathname+='tickets';
+    }
+    let path=pathname+'/page/'+ page;
+    if(pathname.includes('[page]')){
+        path=pathname.replace('[page]',page.toString());
     }
     if (page !== currentPage) {
       router.push({
@@ -22,6 +25,8 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage }) => {
 
   const renderPageNumbers = () => {
     const pages = [];
+    if(totalPages<2)
+      return <></>;
     for (let i = 1; i <= totalPages; i++) {
       pages.push(
         <button 
