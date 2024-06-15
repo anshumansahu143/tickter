@@ -44,7 +44,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		}
 	}
 	
-	
 	// Count the total number of documents that match the filter
 	const totalItems = await Ticket.countDocuments(filter);
 	const totalPages = Math.ceil(totalItems / args.per_page);

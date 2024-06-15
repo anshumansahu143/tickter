@@ -43,7 +43,7 @@ const  Tickets: React.FC<any> = (props) =>{
   }
   return (
     <div className="container p-6 flex flex-wrap">
-      <div className="tix-wrap basis-9/12">
+      <div className="tix-wrap w-full md:w-3/4">
       {
         ticketsData?.items?.length?
         <div className="flex flex-col  shadow-md ">
@@ -65,7 +65,7 @@ const  Tickets: React.FC<any> = (props) =>{
       }
       
       </div>
-      <div className="basis-3/12 ">
+      <div className="w-full md:w-1/4   lg:px-4 md:px-0">
           
           <div className="flex flex-col shadow-lg mx-4 p-4 gap-4 sticky top-[100px]" >
               

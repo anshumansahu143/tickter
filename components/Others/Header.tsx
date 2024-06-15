@@ -77,7 +77,7 @@ const Header = () => {
     <header className="h-[90px] border shadow sticky top-0 inset-x-0 bg-white mx-auto z-50">
       <div className="container h-full flex items-center relative justify-between">
         <Link href="/" className="h-full flex items-center">
-          <img className="h-[25px] sm:h-[50px]" src={admin?.logo} alt="" />
+          <img className="lg:w-[150px] sm:w-[75px]" src={admin?.logo} alt="" />
         </Link>
 
         <div

@@ -26,32 +26,30 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	}catch(error){
 
 	}
+	const sort:any = {};
+	let myitems:any =[];
+	sort['updatedAt'] = -1 ;
+	const regex = new RegExp(search, 'i');
 	if(!user?._id){
         filter['privacy'] = 'public';
-        if(user?.role===1){
-            delete filter.privacy;
+       
+    }else{
+		if(user?.role===0){
+			filter['privacy'] = 'public';
+			myitems = await Ticket.find({privacy:'private','author': user._id,title:regex}).populate('author')
         }
-    }
-
-    const regex = new RegExp(search, 'i');
+	}
 
     filter['title'] = regex;
-	// Count the total number of documents that match the filter
-
-	// Ensure the page number is within the valid range
 	
 	
-	
-	// Determine the sort order
-	const sort:any = {};
-	sort['updatedAt'] = -1 ;
 
 	// Find the items that match the filter and paginate
 	const items = await Ticket.find(filter).populate('author')
 		.sort(sort)
-
+	let allitems= [...items,...myitems];
 	
-    res.status(200).json({ items });
+    res.status(200).json({ items: allitems});
     
   } catch (error: any) {
 	res.status(500).json({ error });

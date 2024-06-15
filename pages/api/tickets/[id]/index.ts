@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import connectDatabase from "../../../lib/connectDatabase";
-import Ticket from "../../../model/Ticket";
-import response_message from "../../../lib/response_message";
+import connectDatabase from "../../../../lib/connectDatabase";
+import Ticket from "../../../../model/Ticket";
+import response_message from "../../../../lib/response_message";
 import { getSession } from 'next-auth/react';
-import User from "../../../model/User";
+import User from "../../../../model/User";
 import mongoose from "mongoose";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {

@@ -63,9 +63,12 @@ const login = () => {
               src="https://cdn-icons-png.flaticon.com/512/1372/1372789.png"
               alt="logo"
             />
-            <span className="text-primary-700">SR</span>
-            <span className="text-red-400 font-bold">BD</span>
-            <span className="text-primary-700">TOPUP</span>
+            <img
+              className=" h-8 mr-2"
+              src="/logo.png"
+              alt="logo"
+            />
+            
           </div>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

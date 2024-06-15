@@ -2,9 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {} from "@fortawesome/fontawesome-svg-core";
 import {
   faWhatsapp,
-  faFacebook,
   faInstagram,
   faYoutube,
+  faGithub,
+  faMedium
 } from "@fortawesome/free-brands-svg-icons";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -13,13 +14,15 @@ import Link from "next/link";
 const Footer = () => {
   const [admin, set_admin] = useState({
     copyright: "© 2021-2022 Game | All rights reserved",
-    email: "contact@domain.com",
+    email: "anshuman.sahu143@gmail.com",
     facebook: "",
     instagram: "",
     location: "",
     phone: "01xxxxxxxxx",
     whatsapp: "01xxxxxxxxx",
     youtube: "01xxxxxxxxx",
+    medium:"https://medium.com/@anshuman.sahu143",
+    github: "https://github.com/anshumansahu143",
   });
 
   return (
@@ -146,36 +149,28 @@ const Footer = () => {
               </p>
             </div>
             <div className="flex items-center justify-center lg:justify-start mt-5 space-x-4">
-              <a
-                href={admin?.facebook}
-                title="Facebook"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center p-2 bg-white bg-opacity-50 hover:bg-opacity-60 text-blue-600">
-                  <FontAwesomeIcon icon={faFacebook} />
-                </div>
-              </a>
-              <a
-                href={admin?.youtube}
-                title="Youtube"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center p-2 bg-white bg-opacity-50 hover:bg-opacity-60 text-red-600">
-                  <FontAwesomeIcon icon={faYoutube} />
-                </div>
-              </a>
-              <a
-                href={admin?.instagram}
-                title="Instagram"
+            <a
+                href={admin?.github}
+                title="github"
                 target="_blank"
                 rel="noreferrer"
               >
                 <div className="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center p-2 bg-white bg-opacity-50 hover:bg-opacity-60 text-[#f500b5]">
-                  <FontAwesomeIcon icon={faInstagram} />
+                  <FontAwesomeIcon icon={faGithub} />
                 </div>
               </a>
+              <a
+                href={admin?.medium}
+                title="medium"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center p-2 bg-white bg-opacity-50 hover:bg-opacity-60 text-[#f500b5]">
+                  <FontAwesomeIcon icon={faMedium} />
+                </div>
+              </a>
+              
+              
             </div>
           </div>
         </div>

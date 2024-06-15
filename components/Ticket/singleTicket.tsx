@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
-import { toFriendlyTime } from "../Common/friendlyTime";
-import useTicket from "../../utils/use-ticket";
-import useReplies from "../../utils/use-replies";
-import Button from "../Common/Button";
-import PostReply from "./postReply";
-import Reply from "./Reply";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAuthContext, useAuthContextType } from "../../context/AuthContext";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { useAuthContext, useAuthContextType } from "../../context/AuthContext";
+import useReplies from "../../utils/use-replies";
+import useTicket from "../../utils/use-ticket";
+import Reply from "./Reply";
+import PostReply from "./postReply";
 
+import TostMessage from "../Utils/TostMessage";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,9 +18,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog"
-import TostMessage from "../Utils/TostMessage";
-import { Skeleton } from "../ui/skeleton"
+} from "../ui/alert-dialog";
+import { Skeleton } from "../ui/skeleton";
 
 const SingleTicket: React.FC<any> = ({ id }) => {
   const router = useRouter();
@@ -76,13 +74,47 @@ const SingleTicket: React.FC<any> = ({ id }) => {
         TostMessage("Some error orrcured", "error");
     });
   }
+
+  const listenReply = (action:string,data:any)=>{
+    console.log(action,data);
+    if(action==='deleted'){
+
+      queryClient.setQueryData(['replies', ticket._id], (oldData:any) => {
+        if (!oldData) {
+          oldData = []; // Initialize as empty array if undefined
+        }
+        
+        const newData = oldData.filter((d:any)=>d._id!==data._id);
+        console.log(oldData,oldData.findIndex((d:any)=>d._id===data._id));
+        return newData;
+      });
+
+      fetch( `/api/replies/${data?._id}`, {
+        method: 'DELETE',
+      } ) // wrapped
+      .then( res => res.json() )
+      .then( data => {
+        if(data.status){
+          TostMessage("Successfully deleted", "success");
+          
+        }else{
+          TostMessage("Some error orrcured", "error");
+        }
+      })
+      .catch( err => {
+          console.log(err);
+          TostMessage("Some error orrcured", "error");
+      });
+
+    }
+  }
   
   return (
     
       ticket?.ticketId?
-      <div className="container flex flex-wrap  my-8">
+      <div className="container flex flex-wrap  my-8 ">
         
-        <div className="tix-wrap basis-9/12 shadow-lg">
+        <div className="tix-wrap w-full md:w-3/4  shadow-lg">
             <div className="bg-white z-10">
               <div className={`${(ticket?.privacy==='private'?'bg-rose-400':'bg-teal-500')} p-4 text-white`}>
                   TICKET #{ticket.ticketId}
@@ -96,7 +128,6 @@ const SingleTicket: React.FC<any> = ({ id }) => {
             {
               showReplyBox?
               <PostReply id={ticket._id} close={()=>setShowReplyBox(false)} replyAdded={async(updatedData:any)=>{
-                console.log(updatedData);
                 queryClient.setQueryData(['replies', ticket._id], (oldData:any) => {
                   if (!oldData) {
                     oldData = []; // Initialize as empty array if undefined
@@ -112,7 +143,7 @@ const SingleTicket: React.FC<any> = ({ id }) => {
               {
                 replies?.length?
                 replies.map((reply:any)=>{
-                  return <Reply reply={reply} key={reply._id}></Reply>
+                  return <Reply reply={reply} key={reply._id} update={listenReply}></Reply>
                 })
                 :isLoading?<div className="flex flex-col gap-2 m-4">
                 <Skeleton className="w-full h-[25px] rounded-full"></Skeleton>
@@ -124,10 +155,10 @@ const SingleTicket: React.FC<any> = ({ id }) => {
               
             </div>
         </div>
-        <div className="basis-3/12 ">
+        <div className="w-full md:w-1/4   lg:px-4 md:px-0">
           
-          <div className="flex flex-col shadow-lg mx-4 p-4 gap-4 sticky top-[100px]" >
-              <div className="bg-teal-500 p-4 text-white -m-4 mb-4">
+          <div className="flex flex-col shadow-lg sticky top-[100px] w-full  p-4 " >
+              <div className="bg-teal-500 p-4 text-white  -mx-4 lg:-mt-4 mb-4 md:-mt-0">
                   Ticket Actions
               </div>
               {

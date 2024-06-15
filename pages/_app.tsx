@@ -13,9 +13,11 @@ import { SessionProvider } from "next-auth/react";
 // Page Changing Loading Effect
 import "nprogress/nprogress.css";
 
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { ReactQueryClientProvider } from "../components/ReactQueryClientProvider";
 import ContextProvider from "../context";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }:any) {
 
@@ -27,10 +29,14 @@ export default function App({ Component, pageProps }:any) {
       
         <ContextProvider>
           <ReactQueryClientProvider>
+            <Head>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            </Head>
             <Header />
             <Component {...pageProps} className="min-h-[100vh]" />
             <Footer />
             <ToastContainer />
+            <ReactQueryDevtools initialIsOpen={false} />
           </ReactQueryClientProvider>
         </ContextProvider>
       

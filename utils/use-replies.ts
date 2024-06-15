@@ -7,7 +7,7 @@ export default function useReplies(id: string) {
     async () => {
         if(!id)return {replies:[]};
         let data:any = {};
-        let response:any = await fetch(`/api/replies/${id}`);
+        let response:any = await fetch(`/api/tickets/${id}/replies`);
         
         if(response.ok){
             response=await response.json();

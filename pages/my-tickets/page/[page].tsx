@@ -6,9 +6,9 @@ export default function TicketsPage() {
   const router = useRouter();
   const { page } = router.query;
   const apage = Array.isArray(page) ? parseInt(page[0]) : page;
-  console.log(apage);
 
-  const [args,setArgs] = useState({page:apage});
+
+  const [args,setArgs] = useState({page:apage,scope:'mine'});
 
   useEffect(()=>{
     setArgs({...args,page:apage});
