@@ -23,7 +23,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     const session = await getSession({ req });
 
    
-  
+    let filter:any = {replyTicketId:ticketId};
     let user:any = {};
     try{
       const { _doc } = await User.findOne({ email:session?.user?.email });
@@ -32,10 +32,32 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
     }
  
-    if(!user){
-        throw Error("Sorry you cannot fetch any tickets!");
+    
+    let items:any = await Reply.find(filter).populate('author').populate('replyTicketId').sort({'createdAt':-1}).exec();
+
+
+
+    if(items.length &&  (!user?.role || user?.role===0)){
+      items = items.map((item:any)=>{
+        if(item.private){
+            let notShowPrivate = 0;
+            if(!user?._id){
+                notShowPrivate = 1;
+            }else if(user?._id!==item?.ticket?.author){
+                if(item.author!==user?._id){
+                    notShowPrivate = 1;
+                }                                                                               
+            }
+            
+            if(notShowPrivate){
+                item.content = '<div class="text-rose-500">Private Reply</div>';
+            }
+        }
+        return item;
+      });
     }
-    const items = await Reply.find({replyTicketId:ticketId}).populate('author').sort({'createdAt':-1}).exec();
+
+
     res.status(200).json({  replies:items });
    
     

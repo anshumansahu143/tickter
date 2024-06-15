@@ -13,7 +13,7 @@ export default function Reply(props:any) {
 
   return (
    
-      <div className={` flex flex-wrap gap-4 border-b border-b-slate-200 p-6  transition-all`} onClick={()=>{
+      <div className={`${(reply?.private?'bg-slate-100':'')} flex flex-wrap gap-4 border border-slate-200 p-6  transition-all`} onClick={()=>{
         
       }}>
           {
@@ -32,7 +32,7 @@ export default function Reply(props:any) {
                     }
                 </div>
               </div>
-              <div className="mt-12" dangerouslySetInnerHTML={{__html:reply.content}}></div>
+              <div className="mt-4" dangerouslySetInnerHTML={{__html:reply.content}}></div>
           </div>
       </div>
   );
