@@ -158,24 +158,22 @@ const SingleTicket: React.FC<any> = ({ id }) => {
         <div className="w-full md:w-1/4   lg:px-4 md:px-0">
           
           <div className="flex flex-col shadow-lg sticky top-[100px] w-full  p-4 " >
-              <div className="bg-teal-500 p-4 text-white  -mx-4 lg:-mt-4 mb-4 md:-mt-0">
+              <div className="bg-teal-500 p-4 text-white  -mx-4 lg:-mt-4 mb-4 md:-mt-0 ">
                   Ticket Actions
               </div>
               {
                 ticket?.author?._id=== state?.user?._id ||  state?.user?.role==1?
-                <>
+                <div className=" flex flex-col  gap-2">
                 
                 <select className="border p-2" onChange={(e)=>{
                   updateTicket('status',e.target.value)
                 }} value={ticket?.status}>
-                  <option value="">Select status</option>
                   <option value="open">Open</option>
                   <option value="closed">Closed</option>
                 </select>
                 <select className="border  p-2" onChange={(e)=>{
                   updateTicket('privacy',e.target.value)
                 }} value={ticket?.privacy}>
-                  <option value="">Select privacy</option>
                   <option value="private">Private</option>
                   <option value="public">Public</option>
                 </select>
@@ -196,7 +194,7 @@ const SingleTicket: React.FC<any> = ({ id }) => {
               </AlertDialog>
 
                 
-                </>
+                </div>
                 :''
               }
           </div>

@@ -12,7 +12,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     await connectDatabase();
     let { id } = req.query;
     id = Array.isArray(id)?id[0]:id;
-    console.log(id);
+
     // check request method PATCH or not
     if (req.method === "PATCH"){
         // check req body empty
@@ -36,9 +36,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
                 upsert: false,
                 runValidators: true,
             });
-            res.status(200).json({ status: result });
+            return res.status(200).json({ status: result });
         }else{
-            res.status(200).json({ status: false });
+            return res.status(200).json({ status: false });
         }
     }
       
@@ -59,15 +59,15 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
        
         if(ticket.author.equals(user._id) || user.role==1){
             const result:any = await Ticket.deleteOne({_id:new mongoose.Types.ObjectId(id)});
-            res.status(200).json({ status: result });
+            return res.status(200).json({ status: result });
         }else{
-            res.status(200).json({ status: false });
+            return res.status(200).json({ status: false });
         }
         
-        return;
+      
     }
     throw Error("HTTP method not valid only PATCH AND DELETE Accepted!");
   } catch (error: any) {
-    res.status(500).json({ error: error });
+    return res.status(500).json({ error: error });
   }
 }

@@ -12,12 +12,14 @@ import { useCallback, useEffect, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import debounce from 'debounce';
 import Ticket from "../Ticket/ticket";
+import { X } from "lucide-react";
+import { useAuthContext, useAuthContextType } from "../../context/AuthContext";
 
 
 
 const Header = () => {
 
-
+  const { state }: useAuthContextType = useAuthContext();
   
   const [loading,setLoading] = useState(false);
   const [search,setSearch] = useState('');
@@ -71,7 +73,9 @@ const Header = () => {
 
   const [open_profile_opt, set_opo] = useState(false);
 
-  function searchToggle() {}
+  function searchToggle() {
+    set_show_search(!show_search);
+  }
 
   return (
     <header className="h-[90px] border shadow sticky top-0 inset-x-0 bg-white mx-auto z-50">
@@ -83,18 +87,18 @@ const Header = () => {
         <div
           className={` ${
             show_search ? "scale-y-100" : "scale-y-0"
-          } relative search_bar w-80 sm:w-[500px] 2xl:w-[600px] transition-transform lg:scale-y-100 absolute lg:relative left-5 sm:left-0 top-[72px] lg:top-0 items-center justify-center h-10 transform origin-top`}
+          } relative search_bar w-full sm:w-[500px] 2xl:w-[600px] transition-transform lg:scale-y-100 absolute lg:relative left-5 sm:left-0 top-[72px] lg:top-0 items-center justify-center h-10 transform origin-top md:w-full lg:w-80`}
         >
           <input
             type="search"
             placeholder="Search..."
-            className="h-full px-3 w-full rounded border-2 border-green-primary text-green-primary focus:ring focus:border-transparent"
+            className=" h-full px-3 w-full rounded border-2 border-green-primary text-green-primary focus:ring focus:border-transparent"
             onChange={onChange}
           />
           
             {
               search?.length?
-              <div className="absolute top-[100%] p-4 bg-white  w-full shadow-lg rounded-lg border max-h-[80vh] overflow-y-auto">
+              <div className="absolute top-[100%] p-4 bg-white  w-full shadow-lg rounded-lg border max-h-[80vh] overflow-y-auto left-[-30vw] w-[80vw]  lg:top-[65px] ">
               {
                 results?.length?
                 results.map((result:any)=>{
@@ -119,10 +123,10 @@ const Header = () => {
         <div className="flex items-center justify-center gap-x-3 sm:gap-x-4">
           <button
             onClick={searchToggle}
-            className="lg:hidden text-sm transition-all font-medium bg-transparent border border-dark-primary text-dark-primary hover:border-transparent hover:bg-dark-primary hover:text-white w-8 sm:w-10 h-8 sm:h-10 items-center justify-center rounded-full focus:ring-2 focus:border-transparent focus:ring-dark-primary  md:flex"
+            className="lg:hidden text-sm transition-all font-medium  text-dark-primary w-8 sm:w-10 h-8 sm:h-10 items-center justify-center    md:flex"
           >
             {show_search ? (
-              <FontAwesomeIcon icon={faRemove} />
+              <X/>
             ) : (
               <FontAwesomeIcon icon={faSearch} />
             )}
@@ -138,15 +142,28 @@ const Header = () => {
                   }, 500)
                 }
                 type="button"
-                className={`w-full py-2 px-3 rounded bg-gray-100 shadow border flex items-center justify-center gap-x-3`}
+                className={`w-full py-2 px-3 rounded bg-gray-100 shadow border flex items-center justify-center gap-x-3 `}
               >
-                <span className={`text-slate-700`}> {session?.user?.name} </span>
-
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  alt=""
-                />
+                {
+                  session?.user?.name?
+                  <span className={`text-slate-700 hidden lg:flex w-[100px] truncate overflow-hidden`} title={session.user.name}> {session?.user?.name} </span>
+                  :''
+                }
+                
+                {
+                  state?.user?.image?
+                  <img
+                    className="h-8 w-8 rounded-full"
+                    src={state?.user?.image}
+                    alt=""
+                  />
+                  :<img
+                    className="h-8 w-8 rounded-full"
+                    src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                    alt=""
+                  />
+                }
+                
                 <FontAwesomeIcon
                   className={`text-sm text-gray-500 transition-all transform ${
                     open_profile_opt ? "rotate-180" : "rotate-0"
@@ -156,7 +173,7 @@ const Header = () => {
               </button>
 
               <div
-                className={`absolute w-full bg-white rounded shadow top-full right-0 transition-all origin-top transform ${
+                className={`absolute w-[150px] bg-white rounded shadow top-full right-0 transition-all origin-top transform ${
                   open_profile_opt ? "scale-y-100" : "scale-y-0"
                 }`}
               >
