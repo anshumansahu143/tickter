@@ -20,7 +20,7 @@ export default function Reply(props:any) {
             <img className="w-12 h-12 border rounded-[50%]" src={reply?.author?.image}/>
             :<img className="w-12 h-12 border rounded-[50%]" src={'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}/>
           }
-          <div className="reply-details flex-1 ">
+          <div className="reply-details flex-1 max-w-[100%]">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs">{reply.author.name}</span>
                 {
